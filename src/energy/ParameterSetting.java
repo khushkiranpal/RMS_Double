@@ -14,13 +14,13 @@ public class ParameterSetting {
 		for (ITask t: taskset)
 		{
 			t.setFrequency(frequency);
-			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWcet()/frequency)));
+		//	t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWcet()/frequency)));
 
-			/*t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWcet()/frequency))*100);
-			t.setWCET_orginal(t.getWCET_orginal()*100);
-			t.setPeriod(t.getPeriod()*100);
-			t.setDeadline(t.getDeadline()*100);*/
-		//	System.out.println("  wcet  "+t.getWcet());
+			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getC()/frequency))*1000);
+			t.setWCET_orginal(t.getC()*1000);
+			t.setPeriod(t.getT()*1000);
+			t.setDeadline(t.getD()*1000);
+		//	System.out.println("  wcet  "+t.getWcet()+ " orig "+t.getWCET_orginal());
 		}
 	}
 	

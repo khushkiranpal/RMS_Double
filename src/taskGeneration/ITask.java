@@ -16,6 +16,20 @@ import java.util.PriorityQueue;
 public interface ITask {
 	
 
+
+	/**
+ * @return the c
+ */
+public long getC();
+/**
+ * @return the d
+ */
+public long getD();
+/**
+ * @return the t
+ */
+public long getT() ;
+
 	/**
  * @param wCET_orginal the wCET_orginal to set
  */

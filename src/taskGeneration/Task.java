@@ -15,7 +15,10 @@ import java.util.PriorityQueue;
  */
 public  class Task implements ITask {
         private long id;
-	private long arrival;
+	private final long C;
+	private final long D;
+	private final long T;
+    private long arrival;
 	private  long WCET_orginal;
 	private long wcet;
 	private double BCET;
@@ -43,6 +46,9 @@ public  class Task implements ITask {
 	
 	public Task(long arrival, long wcet, long period,long deadline, int priority) {
 		
+		this.C = wcet;
+		this.D = deadline;
+		this.T = period;
 		this.arrival = arrival;
 		this.wcet = wcet;
 		this.WCET_orginal = wcet;
@@ -55,6 +61,9 @@ public  class Task implements ITask {
 	
 	public Task(long arrival,long id, long wcet, long period,long deadline, int priority) {
 		
+		this.C = wcet;
+		this.D = deadline;
+		this.T = period;
 		this.arrival = arrival;
 		this.wcet = wcet;
 		this.WCET_orginal = wcet;
@@ -67,7 +76,10 @@ public  class Task implements ITask {
 	
 public Task(long arrival,long id, long wcet, long period,long deadline, int priority, float u) {
 		
-		this.arrival = arrival;
+	this.C = wcet;
+	this.D = deadline;
+	this.T = period;
+	this.arrival = arrival;
 		this.wcet = wcet;
 		this.WCET_orginal = wcet;
 		this.period = period;
@@ -81,6 +93,27 @@ public Task(long arrival,long id, long wcet, long period,long deadline, int prio
      
 
 
+
+	/**
+ * @return the c
+ */
+public long getC() {
+	return C;
+}
+
+/**
+ * @return the d
+ */
+public long getD() {
+	return D;
+}
+
+/**
+ * @return the t
+ */
+public long getT() {
+	return T;
+}
 
 	/**
  * @param wCET_orginal the wCET_orginal to set
