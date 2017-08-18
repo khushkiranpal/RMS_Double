@@ -41,7 +41,7 @@ public class ScheduleRMS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_13_08_2017_23_08";
+	String inputfilename= "testhaque";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -57,7 +57,7 @@ public class ScheduleRMS {
     DecimalFormat twoDecimals = new DecimalFormat("#.##");  // upto 1 decimal points
 
     Energy energyConsumed = new Energy();
-    Job[] current= new Job[2];  // FOR SAVING THE NEWLY INTIAlIZED JOB  FROM JOBQUEUE SO THAT IT 
+    Job[] current= new Job[2], spare_current = new Job[2];  // FOR SAVING THE NEWLY INTIAlIZED JOB  FROM JOBQUEUE SO THAT IT 
 	// IS VISIBLE OUTSIDE THE BLOCK
     
   ITask task;
@@ -69,7 +69,7 @@ public class ScheduleRMS {
     IdleSlot slot = new IdleSlot(); // idle slot
     List <IdleSlot> slots = new ArrayList<IdleSlot>();
     int total_no_tasksets=1;
-     writer2.write("TASKSET UTILIZATION SYS_FREQ FREQ PRIMARY_ENERGY SPARE_ENERGY\n");
+     writer2.write("TASKSET UTILIZATION SYS_FREQ FREQ P_ACTIVE P_IDLE P_SLEEP S_ACTIVE S_IDLE S_SLEEP PRIMARY_ENERGY SPARE_ENERGY\n");
  
     SysClockFreq frequency = new SysClockFreq();
     
@@ -178,7 +178,7 @@ public class ScheduleRMS {
 	    	System.out.println(" hyper  "+hyper);  
 
 	       // if(hyper>100000000)
-	        	hyper = 100000000;
+	        	hyper = 30000;
 			fault = f.lamda_F(hyper/1000, 0.42, fq, 2);        //////////////FAULT////////////
 		
 			
@@ -196,6 +196,7 @@ public class ScheduleRMS {
 					spareJob = j.cloneJob();
 					spareJob.setCompletionSuccess(false);
 					activeJobQ.addJob(j);
+					j.setCompletionSuccess(false);
 					spareQueue.add(spareJob);
 				//	System.out.println("time   "+time+"out  activeJobQ.first().getActivationDate()  "+activeJobQ.first().getActivationDate());
 				    
@@ -222,7 +223,8 @@ public class ScheduleRMS {
 
         while(time<hyper)
     	{
-    //		System.out.println("hyper  "+hyper+"  time  "+Double.valueOf(twoDecimals.format(time)));
+    	//	if(time>21000)
+        	//System.out.println("hyper  "+hyper+"  time  "+time);
     		
     		
     		if (!spareQueue.isEmpty() && spareBusy==false  )
@@ -241,6 +243,7 @@ public class ScheduleRMS {
     					
     					spareBusy=true;
     					spare.setBusy(true);
+    					spare_current[0]= spareJob;/////to make it visible
     					spare.setProc_state(ProcessorState.ACTIVE);
     					 writer1.write(spareJob.getTaskId()+"\t  "+spareJob.getJobId()+"\t"+spareJob.getActivationDate()+
 	               			  "\t"+spareJob.getRomainingTimeCost()+"\t"+spareJob.getAbsoluteDeadline()+"\t"+spareJob.isPreempted+"\t\t"+time+"\t");
@@ -261,7 +264,43 @@ public class ScheduleRMS {
     			 writer1.write(time+"    endtime\n");
     	//		System.out.println("time   "+time  +" spare queue   "+spareQueue.size());
     	//		+"  task  "+spareQueue.first().getTaskId()+   					"  job  "+spareQueue.first().getJobId());
-    			if(spareQueue.size() > 0)
+    			 spare_current[0].setCompletionSuccess(true);
+    			 System.out.println(" active primary job task  "+ current[0].getTaskId());
+ 			//	System.out.println("time    "+time+"  size  "+activeJobQ.size());
+    			// DELETE THE RUNNING JOB  
+ 				
+ 				if(current[0].getTaskId()== spare_current[0].getTaskId() && current[0].getJobId()== spare_current[0].getJobId() 
+ 						  && primary.getProc_state()==ProcessorState.ACTIVE)
+ 				{
+ 					primary.setProc_state(proc_state.IDLE);//-------------------
+ 					primaryBusy = false;  // set processor free
+ 					current[0].setEndTime(time);  // set endtime of job
+	        		
+ 					current[0].setCompletionSuccess(true);//-------------------
+	        	//	completedJobs.add(lastExecutedJob);
+	        	     System.out.println("time   "+time+"  primary   task  "+current[0].getTaskId()+ "  success   "+current[0].isCompletionSuccess());
+	        		writer.write(time+"    endtime\n");
+ 				}
+ 					
+ 				
+ 				// DELETE THE COMPLETED JOB FROM ACTIVE QUEUE
+    			 Iterator<Job> acticeItr = activeJobQ.iterator();
+    			 while(acticeItr.hasNext())
+    			 {
+    				 Job temp1;
+    				 temp1  = acticeItr.next();
+    				 System.out.println("primaary pending  task  "+temp1.getTaskId());
+    		    		 
+    				 if(temp1.getTaskId()== spare_current[0].getTaskId() && temp1.getJobId()== spare_current[0].getJobId())
+    				 {
+    					 temp1.setCompletionSuccess(true);
+    					 System.out.println(" primaary pending task  "+temp1.getTaskId());
+    				 }
+    			 }
+    			 
+    			 
+    			 
+    			 if(spareQueue.size() > 0)
     			{
     				timeToNextPromotion = spareQueue.first().getPromotionTime()- (long)time;
     		//	System.out.println("timeToNextPromotion   "+timeToNextPromotion+" time "+time+"  spareQueue.first().getPromotionTime()   "+spareQueue.first().getPromotionTime());
@@ -272,6 +311,7 @@ public class ScheduleRMS {
     			}
     			spare.setBusy(false);
     			spareBusy=false;
+    			
     			}
     		
     		if (spareBusy && spare.getProc_state()==ProcessorState.ACTIVE)
@@ -310,6 +350,7 @@ public class ScheduleRMS {
 					
 					if (n!=null)
 					{
+						n.setCompletionSuccess(false);
 						activeJobQ.addJob(n);  // add NEW job to queue
 						// System.out.println("time   "+time+"  task  "+activeJobQ.first().getTaskId()+
 				//				"  out  activeJobQ.first().getActivationDate()  "+activeJobQ.first().getActivationDate()
@@ -360,11 +401,13 @@ public class ScheduleRMS {
 	        	 {
 	                	
 	        		j = activeJobQ.pollFirst(); // get the job at the top of queue
+	        		
 	        		// QUEUE MAY BE EMPTY , SO CHECK IF IT IS  NOT NULL
-	        		if (j!=null)      // if job in queue is null 
+	        		if (j!=null && j.isCompletionSuccess()==false)      // if job in queue is null 
 	        		{
-	        			
-	                	primary.setProc_state(proc_state.ACTIVE);
+	        	/*		System.out.println("time   "+time +"  size  "+activeJobQ.size()+"  task  "+j.getTaskId()+
+		        				"  success active job   "+j.isCompletionSuccess());
+	          */      	primary.setProc_state(proc_state.ACTIVE);
 	        			
 	                		
 	        			
@@ -400,17 +443,17 @@ public class ScheduleRMS {
 
 		        		timeToNextArrival= nextActivationTime-lastExecutedJob.getEndTime(); 
 		        	//	System.out.println("nextActivationTime  "+nextActivationTime+"  lastExecutedJob.getEndTime   "+lastExecutedJob.getEndTime());
-		        	//	System.out.println("time   "+time+"timeToNextArrival   "+timeToNextArrival);
+		        		System.out.println("time   "+time+"timeToNextArrival   "+timeToNextArrival);
 		        	
 		        		if (timeToNextArrival<CRITICAL_TIME)
 		        		{
 	        			primary.setProc_state(proc_state.IDLE);
-		        		primary.idleTime++;
+		        		primary.idleTime++;  ///-------------------
 		        		}
 	        			else
 	        			{
 	        				primary.setProc_state(proc_state.SLEEP);
-			        		primary.sleepTime++;
+			        		primary.sleepTime++;//-------------------
 	        			}
 		        			
 	        			if (idle==0)  // if starting of idle slot
@@ -473,16 +516,18 @@ public class ScheduleRMS {
 					// IF NOW TIME IS EQUAL TO ENDTIME OF JOB
 				
 			//	double temp1 = Double.valueOf(twoDecimals.format(time)), temp2= Double.valueOf(twoDecimals.format(endTime-1));
-		        	if ((long)time==(long)endTime-1) // if current time == endtime 
+		        	if ((long)time==(long)endTime-1 && lastExecutedJob.isCompletionSuccess()==false ) // if current time == endtime 
 		        	{
-		        //		System.out.println("                time  "+time+"  end time "+ (endTime-1));
+		      
+		        		//		System.out.println("                time  "+time+"  end time "+ (endTime-1));
 		        		//	Job k =  executedList.get(noOfJobsExec-1);// get last executed job added to list or job at the top of executed list
 		        		primaryBusy = false;  // set processor free
 		        		lastExecutedJob.setEndTime(endTime);  // set endtime of job
-		        		 writer.write(endTime+"    endtime\n");
-		        	//	lastExecutedJob.setCompletionSuccess(true);
-		        	//	completedJobs.add(lastExecutedJob);
 		        		
+		        		lastExecutedJob.setCompletionSuccess(true);//-------------------
+		        	//	completedJobs.add(lastExecutedJob);
+		        //	     System.out.println("time   "+endTime+"   task  "+lastExecutedJob.getTaskId()+ "  success   "+lastExecutedJob.isCompletionSuccess());
+		        		writer.write(endTime+"    endtime\n");
 		        		Iterator<Job> spareitr = spareQueue.iterator();
 		        		while(spareitr.hasNext())
 		        		{
@@ -547,7 +592,8 @@ public class ScheduleRMS {
     	System.out.println("primaryEnergy   "+primaryEnergy +" spareEnergy  "+spareEnergy);
     
     	 writer2.write(total_no_tasksets++ + " "+Double.valueOf(twoDecimals.format(U_SUM))+" "+Double.valueOf(twoDecimals.format(set_fq))+" "
-    	    +" "+ Double.valueOf(twoDecimals.format(fq))+" " +Double.valueOf(twoDecimals.format(primaryEnergy))+" "+Double.valueOf(twoDecimals.format(spareEnergy))+"\n");
+    	    +" "+ Double.valueOf(twoDecimals.format(fq))+" "+primary.activeTime+" "+primary.idleTime+" "+primary.sleepTime
+    	    +" "+spare.activeTime+" "+spare.idleTime+" "+spare.sleepTime+" "+Double.valueOf(twoDecimals.format(primaryEnergy))+" "+Double.valueOf(twoDecimals.format(spareEnergy))+"\n");
     System.out.println("   tasksets  "+total_no_tasksets);
     
     }
