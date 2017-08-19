@@ -118,4 +118,9 @@ public class SortedJobQueue implements ISortedJobQueue {
     public Job getOne() {
 		return job.first();
 	}
+    
+    public void remove(Job j)
+    {
+    	job.remove(j);
+    }
 }

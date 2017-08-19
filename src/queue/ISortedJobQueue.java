@@ -39,7 +39,7 @@ public interface ISortedJobQueue {
 	public Job pollFirst();
 
 	public long size();
-   
+	  public void remove(Job j);
 	public int getId();
 
 	int setId(int id);

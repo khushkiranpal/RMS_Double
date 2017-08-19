@@ -86,6 +86,7 @@ public class ParameterSetting {
 		for (ITask t : taskset)
 		{
 		    t.setSlack(t.getDeadline()-t.getResponseTime());
+		//    System.out.println("task   "+t.getId()+" res time "+t.getResponseTime()+"  promotion   "+t.getSlack());
 		}
 		
 		}
