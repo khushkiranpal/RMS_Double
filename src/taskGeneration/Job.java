@@ -55,6 +55,20 @@ public class Job {
 		this.promotionTime= promotionTime;
 	}
         
+	public Job(JobId id, long activationDate2,long remainingTimeCost, long wcet, long absoluteDeadline2, long period, 
+			double freq, long promotionTime, double BCET, double ACET) { 
+		jobId= id;
+		this.remainingTimeCost = (long)ACET;  ////////////////
+		remainingTime =  (long)ACET;  ////////////////
+		this.deadline= absoluteDeadline2;
+		this.activationDate = activationDate2;
+		absoluteDeadline = absoluteDeadline2;
+		this.period = period;
+		this.frequency = freq;
+		this.promotionTime= promotionTime;
+		this.BCET =  (long)BCET;
+		this.ACET =  (long)ACET;
+	}
 	
 	private long remainingTimeCost; //original wcet
 	private long remainingTime ;  //  wcet/freq
@@ -79,7 +93,8 @@ public class Job {
 	private double voltage;
 	private double extended_exec_time;
 	private boolean completionSuccess=true;
-	
+	private double BCET;
+	private double ACET;
 	 private Processor p;
 	 private int type;   //IF TASK TYPE IS HEAVY WEIGHT OR LIGHT WEIGHT
 	 
@@ -87,6 +102,30 @@ public class Job {
 	 
 	 
 	 /**
+	 * @return the bCET
+	 */
+	public double getBCET() {
+		return BCET;
+	}
+	/**
+	 * @param bCET the bCET to set
+	 */
+	public void setBCET(double bCET) {
+		BCET = bCET;
+	}
+	/**
+	 * @return the aCET
+	 */
+	public double getACET() {
+		return ACET;
+	}
+	/**
+	 * @param aCET the aCET to set
+	 */
+	public void setACET(double aCET) {
+		ACET = aCET;
+	}
+	/**
 	 * @return the completionSuccess
 	 */
 	public boolean isCompletionSuccess() {
@@ -366,7 +405,8 @@ public class Job {
 	 */
 	public Job cloneJob(){
 	//	return  new Job(jobId, activationDate, remainingTimeCost, remainingTime, absoluteDeadline, isPreemptive,type);
-    	return new  Job(jobId, activationDate, remainingTimeCost, remainingTime, absoluteDeadline, period, frequency, (long)promotionTime);
+    	return new  Job(jobId, activationDate, remainingTimeCost, remainingTime, absoluteDeadline,
+    			period, frequency, (long)promotionTime,BCET,ACET);
 
 	}
 	 

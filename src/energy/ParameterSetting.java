@@ -20,7 +20,10 @@ public class ParameterSetting {
 			t.setWCET_orginal(t.getC()*1000);
 			t.setPeriod(t.getT()*1000);
 			t.setDeadline(t.getD()*1000);
-		//	System.out.println("  wcet  "+t.getWcet()+ " orig "+t.getWCET_orginal());
+			
+			
+			t.setBCET(t.getBest_CET()*1000);
+			t.setACET(t.getAverage_CET()*1000);
 		}
 	}
 	
@@ -28,7 +31,8 @@ public class ParameterSetting {
 	{
 		for (ITask t: taskset)
 		{
-			t.setBCET( Double.valueOf(twoDecimals.format(t.getWcet()*ratio)));
+			t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
+			t.setBest_CET(t.getBCET());
 		}
 	}
 	
@@ -44,6 +48,7 @@ public class ParameterSetting {
 			NormalDistribution normal = 	new NormalDistribution(mean, standardDev);
 			acet = normal.sample();
 			t.setACET( Double.valueOf(twoDecimals.format(acet)));
+			t.setAverage_CET(t.getACET());
 		}
 		
 	}

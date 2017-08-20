@@ -1,16 +1,8 @@
 package TEST;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import energy.ParameterSetting;
-import energy.SysClockFreq;
-import queue.ISortedQueue;
-import queue.SortedQueuePeriod;
-import scheduleRMS.ScheduleRMS;
-import taskGeneration.FileTaskReaderTxt;
-import taskGeneration.GenerateTaskSetTxtUUnifast;
-import taskGeneration.ITask;
+import scheduleRMS.ScheduleRMS_EASS;
 
 public class test {
 
@@ -55,8 +47,8 @@ public class test {
 			
 			}
 		}*/
-		ScheduleRMS test = new ScheduleRMS();
-		
+		ScheduleRMS_EASS test = new ScheduleRMS_EASS();
+	//	ScheduleRMS test = new ScheduleRMS();
 		test.schedule();
   /*//  	ParameterSetting ps = new ParameterSetting();
 
@@ -73,7 +65,7 @@ public class test {
 	    	queue.addTasks(set);
 	    	ArrayList<ITask> taskset = new ArrayList<ITask>();
 	    	taskset = queue.getSortedSet();
-	    	ScheduleRMS.prioritize(taskset);
+	    	ScheduleRMS_EASS.prioritize(taskset);
 	    	//freq = frequency.SysClockF(taskset);
 	    	//System.out.println("freq    "+freq);
 	    	

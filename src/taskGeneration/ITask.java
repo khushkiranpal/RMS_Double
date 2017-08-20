@@ -167,6 +167,8 @@ public void setDeadline(long deadline);
 		 * @param time
 		 *            time units
 		 */
+		
+		public  Job activateRMS_energy_ExecTime(long time);
 		public Job activate(long time);
 
 		/**
@@ -177,6 +179,27 @@ public void setDeadline(long deadline);
 		 */
 		public Job getCurrentJob();
 
+
+		/**
+	 * @return the best_CET
+	 */
+	public double getBest_CET();
+
+	/**
+	 * @param best_CET the best_CET to set
+	 */
+	public void setBest_CET(double best_CET) ;
+
+	/**
+	 * @return the average_CET
+	 */
+	public double getAverage_CET() ;
+	/**
+	 * @param average_CET the average_CET to set
+	 */
+	public void setAverage_CET(double average_CET) ;
+		
+		
 		/**
 		 * Checks if the task missed its deadline by checking its current job at a
 		 * certain instant of time

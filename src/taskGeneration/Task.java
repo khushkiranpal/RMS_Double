@@ -22,6 +22,8 @@ public  class Task implements ITask {
 	private  long WCET_orginal;
 	private long wcet;
 	private double BCET;
+	private double Best_CET;
+	private double average_CET;
 	private double ACET;
 	//private final long wcee;
 	private  long period;
@@ -93,6 +95,34 @@ public Task(long arrival,long id, long wcet, long period,long deadline, int prio
      
 
 
+
+	/**
+ * @return the best_CET
+ */
+public double getBest_CET() {
+	return Best_CET;
+}
+
+/**
+ * @param best_CET the best_CET to set
+ */
+public void setBest_CET(double best_CET) {
+	Best_CET = best_CET;
+}
+
+/**
+ * @return the average_CET
+ */
+public double getAverage_CET() {
+	return average_CET;
+}
+
+/**
+ * @param average_CET the average_CET to set
+ */
+public void setAverage_CET(double average_CET) {
+	this.average_CET = average_CET;
+}
 
 	/**
  * @return the c
@@ -281,6 +311,14 @@ public long getWCET_orginal() {
         JobId jobId = new JobId(this.getId(),nextJobId++);
         //       System.out.println("in task     "+"job id "+jobId.getJobId()+"  task id  " + jobId.getTaskId());
         	Job job = new  Job(jobId, time, WCET_orginal, wcet, time + deadline, period, frequency, (long)(Slack+ time));
+        		//getActiveJobs().add(job);
+        		//return job;
+        		return job;
+		}
+	public  Job activateRMS_energy_ExecTime(long time) {
+        JobId jobId = new JobId(this.getId(),nextJobId++);
+        //       System.out.println("in task     "+"job id "+jobId.getJobId()+"  task id  " + jobId.getTaskId());
+        	Job job = new  Job(jobId, time, WCET_orginal, wcet, time + deadline, period, frequency, (long)(Slack+ time), BCET, ACET);
         		//getActiveJobs().add(job);
         		//return job;
         		return job;
