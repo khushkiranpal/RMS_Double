@@ -41,7 +41,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_13_08_2017_23_08";
+	String inputfilename= "IMPLICIT_TOT_SETS_1000_MAX_P_100_PROC_1_20_08_2017_19_42";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
