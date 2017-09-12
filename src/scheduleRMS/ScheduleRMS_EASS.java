@@ -41,7 +41,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_1000_MAX_P_100_PROC_1_20_08_2017_19_42";
+	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_10_09_2017_22_08";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -158,9 +158,14 @@ public class ScheduleRMS_EASS {
     	
     	ps.setResponseTime(taskset);    
     	ps.setPromotionTime(taskset);       //SET PROMOTION TIMES
+    
     	ps.setBCET(taskset, 0.5);
     	ps.setACET(taskset);
+    	/*for(ITask t : taskset)
+    	{
+    	System.out.println("id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
     	
+    	}*/
     	
     	
     	
@@ -196,7 +201,10 @@ public class ScheduleRMS_EASS {
 		TreeSet<Long> activationTimes = new TreeSet<Long>();
 		long nextActivationTime=0;
 		long executedTime=0;
+		
+		
     	// ACTIVATE ALL TASKS AT TIME 0 INITIALLY IN QUEUE  
+		
 		for(ITask t : taskset)  // activate all tasks at time 0
 		{
 					temp=0;
@@ -204,9 +212,9 @@ public class ScheduleRMS_EASS {
 					j.setPriority(t.getPriority());
 					spareJob = j.cloneJob();
 					spareJob.setCompletionSuccess(false);
-					activeJobQ.addJob(j);
+					activeJobQ.addJob(j);  //////ADD TO PRIMARY QUEUE
 					j.setCompletionSuccess(false);
-					spareQueue.add(spareJob);
+					spareQueue.add(spareJob);   /////ADD TO SPARE  QUEUE
 				//	System.out.println("time   "+time+"out  activeJobQ.first().getActivationDate()  "+activeJobQ.first().getActivationDate());
 					//System.out.println("  wcet  "+t.getC()+"  Bcet  "+t.getBCET()+ " ACET "+t.getACET());
 					
@@ -385,7 +393,7 @@ public class ScheduleRMS_EASS {
 					if (n!=null)
 					{
 						n.setCompletionSuccess(false);
-						activeJobQ.addJob(n);  // add NEW job to queue
+						activeJobQ.addJob(n);  // add NEW job ///////////ADD TO PRIMARY QUEUE
 						// System.out.println("time   "+time+"  task  "+activeJobQ.first().getTaskId()+
 				//				"  out  activeJobQ.first().getActivationDate()  "+activeJobQ.first().getActivationDate()
 					//			+"  period  "+activeJobQ.first().getPeriod());
@@ -393,7 +401,7 @@ public class ScheduleRMS_EASS {
  
 						spareJob = n.cloneJob();
 						spareJob.setCompletionSuccess(false);
-						spareQueue.add(spareJob);	
+						spareQueue.add(spareJob);	    ///////////ADD TO SPARE QUEUE
 						// System.out.println("spare size  "+spareQueue.size());
 						 
 						

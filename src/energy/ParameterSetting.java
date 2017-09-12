@@ -22,8 +22,8 @@ public class ParameterSetting {
 			t.setDeadline(t.getD()*1000);
 			
 			
-			t.setBCET(t.getBest_CET()*1000);
-			t.setACET(t.getAverage_CET()*1000);
+			//t.setBCET(t.getBest_CET()*1000);
+			//t.setACET(t.getAverage_CET()*1000);
 		}
 	}
 	
@@ -31,8 +31,12 @@ public class ParameterSetting {
 	{
 		for (ITask t: taskset)
 		{
-			t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
+		//	t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
+			t.setBCET( Double.valueOf(twoDecimals.format(t.getWcet()*ratio)));
 			t.setBest_CET(t.getBCET());
+		//	t.setBCET(t.getBest_CET()*1000);
+			t.setBCET(t.getBest_CET());
+
 		}
 	}
 	
@@ -49,6 +53,7 @@ public class ParameterSetting {
 			acet = normal.sample();
 			t.setACET( Double.valueOf(twoDecimals.format(acet)));
 			t.setAverage_CET(t.getACET());
+			t.setACET(t.getAverage_CET());
 		}
 		
 	}

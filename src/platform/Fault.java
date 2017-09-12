@@ -42,17 +42,13 @@ public class Fault {
 	}
 	
 	public ArrayList<Integer>  lamda_F( long time, double fMin, double freq, int d)
-	
-	{
+		{
 		int count = 0;
-	
-		ArrayList<Integer> faults = new ArrayList<Integer>();
+			ArrayList<Integer> faults = new ArrayList<Integer>();
 		double mean , exponent;
 		exponent = (d*(1-freq))/(1-fMin);
 		mean = Math.pow(10, exponent);
 	//	System.out.println("  mean   "+mean*0.000001 );
-		
-		
 		PoissonDistribution poisson = new PoissonDistribution(0.000001*mean) 	;
 		for(int i= 1; i<= time; i++)
 		{

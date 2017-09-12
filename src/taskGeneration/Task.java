@@ -315,6 +315,8 @@ public long getWCET_orginal() {
         		//return job;
         		return job;
 		}
+	
+	//
 	public  Job activateRMS_energy_ExecTime(long time) {
         JobId jobId = new JobId(this.getId(),nextJobId++);
         //       System.out.println("in task     "+"job id "+jobId.getJobId()+"  task id  " + jobId.getTaskId());

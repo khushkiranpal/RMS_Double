@@ -2,6 +2,7 @@ package TEST;
 
 import java.io.IOException;
 
+import scheduleRMS.ScheduleRMS;
 import scheduleRMS.ScheduleRMS_EASS;
 
 public class test {
@@ -47,8 +48,8 @@ public class test {
 			
 			}
 		}*/
-		ScheduleRMS_EASS test = new ScheduleRMS_EASS();
-	//	ScheduleRMS test = new ScheduleRMS();
+	//	ScheduleRMS_EASS test = new ScheduleRMS_EASS();
+		ScheduleRMS test = new ScheduleRMS();
 		test.schedule();
   /*//  	ParameterSetting ps = new ParameterSetting();
 
