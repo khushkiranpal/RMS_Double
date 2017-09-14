@@ -16,11 +16,13 @@ public class ParameterSetting {
 			t.setFrequency(frequency);
 		//	t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWcet()/frequency)));
 
-			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getC()/frequency))*1000);
-			t.setWCET_orginal(t.getC()*1000);
+			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getC()/frequency)));
+			t.setBCET(t.getBCET()/frequency);
+			t.setACET(t.getACET()/frequency);
+			/*t.setWCET_orginal(t.getC()*1000);
 			t.setPeriod(t.getT()*1000);
 			t.setDeadline(t.getD()*1000);
-			
+			*/
 			
 			//t.setBCET(t.getBest_CET()*1000);
 			//t.setACET(t.getAverage_CET()*1000);
@@ -32,7 +34,7 @@ public class ParameterSetting {
 		for (ITask t: taskset)
 		{
 		//	t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
-			t.setBCET( Double.valueOf(twoDecimals.format(t.getWcet()*ratio)));
+			t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
 			t.setBest_CET(t.getBCET());
 		//	t.setBCET(t.getBest_CET()*1000);
 			t.setBCET(t.getBest_CET());
@@ -46,8 +48,8 @@ public class ParameterSetting {
 	//	NormalDistribution normal = 	new NormalDistribution();
 		for (ITask t: taskset)
 		{
-			mean = (t.getWcet()+t.getBCET())/2;
-			variance = (t.getWcet()-t.getBCET())/6;
+			mean = (t.getC()+t.getBCET())/2;
+			variance = (t.getC()-t.getBCET())/6;
 			standardDev = Math.sqrt(variance);
 			NormalDistribution normal = 	new NormalDistribution(mean, standardDev);
 			acet = normal.sample();
@@ -56,6 +58,20 @@ public class ParameterSetting {
 			t.setACET(t.getAverage_CET());
 		}
 		
+	}
+	
+	public void setParameterDouble(ArrayList<ITask> taskset)
+	{
+	
+		for (ITask t: taskset)
+		{
+			t.setWcet(t.getWcet()*1000);
+			t.setWCET_orginal(t.getC()*1000);
+			t.setPeriod(t.getT()*1000);
+			t.setDeadline(t.getD()*1000);
+			t.setACET(t.getACET()*1000);
+			t.setBCET(t.getBCET()*1000);
+		}
 	}
 	
 	/**

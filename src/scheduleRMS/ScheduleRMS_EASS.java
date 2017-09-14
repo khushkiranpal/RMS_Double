@@ -41,7 +41,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_10_09_2017_22_08";
+	String inputfilename= "testhaque";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -127,6 +127,11 @@ public class ScheduleRMS_EASS {
     	prioritize(taskset);
     	
     	ParameterSetting ps = new ParameterSetting();
+    	ps.setResponseTime(taskset);    
+    	ps.setPromotionTime(taskset);       //SET PROMOTION TIMES
+    
+    	ps.setBCET(taskset, 0.5);
+    	ps.setACET(taskset);
     	double set_fq = frequency.SysClockF(taskset), fq = 0;
     /*	if (set_fq>0 && set_fq<=0.5)
     		fq=0.50;
@@ -156,11 +161,7 @@ public class ScheduleRMS_EASS {
        }
     	 
     	
-    	ps.setResponseTime(taskset);    
-    	ps.setPromotionTime(taskset);       //SET PROMOTION TIMES
-    
-    	ps.setBCET(taskset, 0.5);
-    	ps.setACET(taskset);
+    	ps.setParameterDouble(taskset);
     	/*for(ITask t : taskset)
     	{
     	System.out.println("id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
@@ -192,7 +193,7 @@ public class ScheduleRMS_EASS {
 	    	System.out.println(" hyper  "+hyper);  
 
 	       // if(hyper>100000000)
-	        	hyper = 100000000;
+	        	hyper = 30000;//100000000;
 			fault = f.lamda_F(hyper/1000, 0.42, fq, 2);        //////////////FAULT////////////
 		
 			
@@ -202,6 +203,17 @@ public class ScheduleRMS_EASS {
 		long nextActivationTime=0;
 		long executedTime=0;
 		
+		
+		// NPM RESULT////////////////////
+		  double[] npmResult = new double[5];
+		  NoPowerManag npm = new NoPowerManag();
+		  ArrayList<ITask> taskset_copy = new ArrayList<ITask>();
+			for (int i = 0 ; i<taskset.size();i++){
+	    	    taskset_copy.add(taskset.get(i).cloneTask_RMS_double()) ;
+	    	   
+	    	}
+		  
+		  npmResult = npm.schedule(taskset_copy, fault);
 		
     	// ACTIVATE ALL TASKS AT TIME 0 INITIALLY IN QUEUE  
 		

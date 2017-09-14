@@ -145,6 +145,8 @@ public void setDeadline(long deadline);
 		 * @return clones task
 		 */
 		public ITask cloneTask();
+		
+		  public ITask cloneTask_RMS_double() ;
            //     public long getLaxity();
 
 		/**

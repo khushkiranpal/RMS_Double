@@ -61,6 +61,24 @@ public  class Task implements ITask {
 		this.id = ++count;
 	}
 	
+	// FOR rms_DOUBLE Task(arrival,id, wcet,period, deadline,  priority,ACET,BCET );
+	public Task(long arrival, long id, long wcet, long period,long deadline, int priority, double ACET, double BCET) {
+		
+		this.C = wcet;
+		this.D = deadline;
+		this.T = period;
+		this.arrival = arrival;
+		this.wcet = wcet;
+		this.WCET_orginal = wcet;
+		this.period = period;
+		this.deadline = deadline;
+		this.priority = priority;
+		//this.id  = id;
+		this.id = ++count;
+		this.ACET = ACET;
+		this.BCET = BCET;
+	}
+	
 	public Task(long arrival,long id, long wcet, long period,long deadline, int priority) {
 		
 		this.C = wcet;
@@ -262,8 +280,12 @@ public long getWCET_orginal() {
 	}
        
         public ITask cloneTask() {
-		return new Task(arrival,id, WCET_orginal,  period, deadline,  priority);
+		return new Task(arrival,id, C,  T, D,  priority);
 	}
+        
+        public ITask cloneTask_RMS_double() {
+    		return new Task(arrival,id, WCET_orginal,period, deadline,  priority,ACET,BCET );
+    	}
     
         
 	private final PriorityQueue<Job> activeJobs = new PriorityQueue<Job>(2,

@@ -1,9 +1,17 @@
 package TEST;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
-import scheduleRMS.ScheduleRMS;
+import energy.ParameterSetting;
+import energy.SysClockFreq;
+import queue.ISortedQueue;
+import queue.SortedQueuePeriod;
 import scheduleRMS.ScheduleRMS_EASS;
+import taskGeneration.FileTaskReaderTxt;
+import taskGeneration.GenerateTaskSetTxtUUnifast;
+import taskGeneration.ITask;
 
 public class test {
 
@@ -48,13 +56,13 @@ public class test {
 			
 			}
 		}*/
-	//	ScheduleRMS_EASS test = new ScheduleRMS_EASS();
-		ScheduleRMS test = new ScheduleRMS();
+		ScheduleRMS_EASS test = new ScheduleRMS_EASS();
+	//	ScheduleRMS test = new ScheduleRMS();
 		test.schedule();
-  /*//  	ParameterSetting ps = new ParameterSetting();
+    /*	ParameterSetting ps = new ParameterSetting();
 
 	
-		 String inputfilename= "IMPLICIT_TOT_SETS_10_MAX_P_100_PROC_1_08_08_2017_19_11";
+		 String inputfilename= "testhaque";
 	    FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
 	    SysClockFreq frequency = new SysClockFreq();
 	    ITask[] set;
@@ -69,27 +77,33 @@ public class test {
 	    	ScheduleRMS_EASS.prioritize(taskset);
 	    	//freq = frequency.SysClockF(taskset);
 	    	//System.out.println("freq    "+freq);
-	    	
-	    	
+	    	ArrayList<ITask> taskset_copy = new ArrayList<ITask>();
+		    
+	    
 	 		double set_fq = frequency.SysClockF(taskset), fq = 0;
-	     	if (set_fq<=0.5)
-	     		fq=0.50;
-	     	else    		
-	     		if(set_fq>0.5 && set_fq<=.75)
-	     			fq=0.75;
-	     	else if (set_fq>0.75)
-	     		fq=1.0;
+	 
 	     		
 	     	System.out.println("frequency   " +fq);
 	    	
 	    	
-	    	
+	     	 //taskset.remove(2);
 	   	freq = 0.5;
-	    //	ps.set_freq(taskset, freq);
-	    //	ps.setBCET(taskset, 0.5);
-	    //	ps.setACET(taskset);
+	   
+	    
 	    	ps.setResponseTime(taskset);
+	    	ps.setResponseTime(taskset_copy);
+	    	ps.setPromotionTime(taskset_copy);
 	    	ps.setPromotionTime(taskset);
+	    	//  		  	ps.setBCET(taskset_copy, 0.5);
+	    	  	ps.setBCET(taskset, 0.5);
+	    //	  	ps.setACET(taskset_copy);
+	    	  	ps.setACET(taskset);
+	    		for (int i = 0 ; i<taskset.size();i++){
+		    	    taskset_copy.add(taskset.get(i).cloneTask_RMS_double()) ;
+		    	   
+		    	}
+	    		ps.set_freq(taskset, freq);
+	    		ps.setParameterDouble(taskset);
 	    	for (ITask t: taskset)
 	    	{
 				System.out.println("task i "+t.getId()+" wcet  "+t.getWcet()+"  response  "+t.getResponseTime()+"  promotion time "+t.getSlack());
@@ -97,9 +111,18 @@ public class test {
 	    		System.out.println("id  "+t.getId()+" c  "+t.getWCET_orginal()+" freq  "+freq +"  wcet  "+t.getWcet()+
 	    				"  bcet  "+t.getBCET()+"   acet   "+t.getACET());
 	    	}
+	    	
+	    	for (ITask t: taskset_copy)
+	    	{
+				System.out.println("       in copy  task i "+t.getId()+" wcet  "+t.getWcet()+"  response  "+t.getResponseTime()+"  promotion time "+t.getSlack());
+
+	    		System.out.println("        id  "+t.getId()+" c  "+t.getWCET_orginal()+" freq  "+freq +"  wcet  "+t.getWcet()+
+	    				"  bcet  "+t.getBCET()+"   acet   "+t.getACET());
+	    	}
+	    	
 	    	System.out.println(GenerateTaskSetTxtUUnifast.worstCaseResp_TDA_RMS(taskset));
-    	test.schedule();*/
-	   
+   
+	    }*/
 	}
 
 }
