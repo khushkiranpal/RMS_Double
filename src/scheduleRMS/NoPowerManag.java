@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TreeSet;
 
+import energy.ParameterSetting;
 import platform.Energy;
 import queue.ISortedJobQueue;
 import queue.ISortedQueue;
@@ -65,15 +66,16 @@ public class NoPowerManag {
 			Job j; //job
 			TreeSet activationTimes = new TreeSet();
 			long nextActivationTime=0 , executedTime=0;
-		
-			for(ITask t : taskset)
+			ParameterSetting ps = new ParameterSetting();
+			ps.setParameterDouble(taskset);
+			/*for(ITask t : taskset)
 	    	{
-	    	System.out.println("id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
+	    	System.out.println("taskset copy  id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
 	    	
 	    	}
+			*/
 			
-			
-			hyper = 30000;//0000;   ////////////////hyper////////////
+			hyper = 100000000;//0000;   ////////////////hyper////////////
 			
 			// ACTIVATE ALL TASKS AT TIME 0 INITIALLY IN QUEUE  
 					
@@ -189,7 +191,7 @@ public class NoPowerManag {
 	        											// BCOZ START TIME IS EQUAL TO END OF LAST EXECUTED JOB
 	        				
 		        		//		activeTime++;
-		        				endTime = time+j.getRemainingTime();
+		        				endTime = time+j.getRomainingTimeCost();//j.getRemainingTime();
 		        		//	System.out.println("current[0]"+current[0].getTaskId()+"endTime  "+endTime + "   active time  "+activeTime);
 		        			   busy = true;   //set  processor busy
 		        			
@@ -250,7 +252,9 @@ public class NoPowerManag {
 	    	 }*/
 	    System.out.println("end NPM active time  "+activeTime);
 	    primaryEnergy = energyConsumed.energyActive(activeTime, 1)+energyConsumed.energy_IDLE(hyper-activeTime);
-		
+		result[0]= energyConsumed.energyActive(activeTime, 1);
+		result[1] =energyConsumed.energy_IDLE(hyper-activeTime);
+		result[2] = primaryEnergy;
 	    return result;
 	    
 	 //   writer2.write(total_no_tasks++ +" "+ Double.valueOf(twoDecimals.format(U_SUM))+" "+activeTime+" "+ (hyper-activeTime) 

@@ -16,9 +16,12 @@ public class ParameterSetting {
 			t.setFrequency(frequency);
 		//	t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWcet()/frequency)));
 
-			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getC()/frequency)));
-			t.setBCET(t.getBCET()/frequency);
-			t.setACET(t.getACET()/frequency);
+			t.setWcet( Double.valueOf(twoDecimals.format((double)t.getWCET_orginal()/frequency)));
+	//		System.out.println("wcet  "+t.getWcet());
+			t.setBCET(t.getBest_CET()/frequency);
+		//	System.out.println("bcet   "+t.getBCET());
+
+			t.setACET(t.getAverage_CET()/frequency);
 			/*t.setWCET_orginal(t.getC()*1000);
 			t.setPeriod(t.getT()*1000);
 			t.setDeadline(t.getD()*1000);
@@ -34,10 +37,12 @@ public class ParameterSetting {
 		for (ITask t: taskset)
 		{
 		//	t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
-			t.setBCET( Double.valueOf(twoDecimals.format(t.getC()*ratio)));
+			t.setBCET( Double.valueOf(twoDecimals.format(t.getWCET_orginal()*ratio)));
+		//	System.out.println("bcet   "+t.getBCET());
+			
 			t.setBest_CET(t.getBCET());
 		//	t.setBCET(t.getBest_CET()*1000);
-			t.setBCET(t.getBest_CET());
+		//	t.setBCET(t.getBest_CET());
 
 		}
 	}
@@ -48,14 +53,14 @@ public class ParameterSetting {
 	//	NormalDistribution normal = 	new NormalDistribution();
 		for (ITask t: taskset)
 		{
-			mean = (t.getC()+t.getBCET())/2;
-			variance = (t.getC()-t.getBCET())/6;
+			mean = (t.getWCET_orginal()+t.getBCET())/2;
+			variance = (t.getWCET_orginal()-t.getBCET())/6;
 			standardDev = Math.sqrt(variance);
 			NormalDistribution normal = 	new NormalDistribution(mean, standardDev);
 			acet = normal.sample();
 			t.setACET( Double.valueOf(twoDecimals.format(acet)));
 			t.setAverage_CET(t.getACET());
-			t.setACET(t.getAverage_CET());
+		//	t.setACET(t.getAverage_CET());
 		}
 		
 	}
@@ -66,11 +71,14 @@ public class ParameterSetting {
 		for (ITask t: taskset)
 		{
 			t.setWcet(t.getWcet()*1000);
+	//		System.out.println(" 1000 wcet  "+t.getWcet());
 			t.setWCET_orginal(t.getC()*1000);
 			t.setPeriod(t.getT()*1000);
 			t.setDeadline(t.getD()*1000);
 			t.setACET(t.getACET()*1000);
 			t.setBCET(t.getBCET()*1000);
+			t.setBest_CET(t.getBest_CET()*1000);
+			t.setAverage_CET(t.getAverage_CET()*1000);
 		}
 	}
 	

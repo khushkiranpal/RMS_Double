@@ -77,6 +77,7 @@ public  class Task implements ITask {
 		this.id = ++count;
 		this.ACET = ACET;
 		this.BCET = BCET;
+		
 	}
 	
 	public Task(long arrival,long id, long wcet, long period,long deadline, int priority) {
@@ -342,7 +343,7 @@ public long getWCET_orginal() {
 	public  Job activateRMS_energy_ExecTime(long time) {
         JobId jobId = new JobId(this.getId(),nextJobId++);
         //       System.out.println("in task     "+"job id "+jobId.getJobId()+"  task id  " + jobId.getTaskId());
-        	Job job = new  Job(jobId, time, WCET_orginal, wcet, time + deadline, period, frequency, (long)(Slack+ time), BCET, ACET);
+        	Job job = new  Job(jobId, time, WCET_orginal, wcet, time + deadline, period, frequency, (long)(Slack+ time), BCET, ACET,Best_CET,average_CET);
         		//getActiveJobs().add(job);
         		//return job;
         		return job;

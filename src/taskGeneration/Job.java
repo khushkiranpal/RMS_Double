@@ -56,10 +56,10 @@ public class Job {
 	}
         
 	public Job(JobId id, long activationDate2,long remainingTimeCost, long wcet, long absoluteDeadline2, long period, 
-			double freq, long promotionTime, double BCET, double ACET) { 
+			double freq, long promotionTime, double BCET, double ACET, double Best_CET, double average_CET ) { 
 		jobId= id;
-		this.remainingTimeCost = (long)ACET;  ////////////////
-		remainingTime =  (long)ACET;  ////////////////
+		this.remainingTimeCost = (long)average_CET;//remainingTimeCost;//(long)ACET;  ////////////////
+		remainingTime = (long)ACET; //wcet;//(long)ACET;  ////////////////
 		this.deadline= absoluteDeadline2;
 		this.activationDate = activationDate2;
 		absoluteDeadline = absoluteDeadline2;
@@ -68,6 +68,9 @@ public class Job {
 		this.promotionTime= promotionTime;
 		this.BCET =  (long)BCET;
 		this.ACET =  (long)ACET;
+		this.Best_CET = Best_CET;
+		this.average_CET= average_CET;
+		
 	}
 	
 	private long remainingTimeCost; //original wcet
@@ -95,6 +98,9 @@ public class Job {
 	private boolean completionSuccess=true;
 	private double BCET;
 	private double ACET;
+	private double Best_CET;
+	private double average_CET;
+	
 	 private Processor p;
 	 private int type;   //IF TASK TYPE IS HEAVY WEIGHT OR LIGHT WEIGHT
 	 
@@ -406,13 +412,37 @@ public class Job {
 	public Job cloneJob(){
 	//	return  new Job(jobId, activationDate, remainingTimeCost, remainingTime, absoluteDeadline, isPreemptive,type);
     	return new  Job(jobId, activationDate, remainingTimeCost, remainingTime, absoluteDeadline,
-    			period, frequency, (long)promotionTime,BCET,ACET);
+    			period, frequency, (long)promotionTime,BCET,ACET,Best_CET, average_CET);
 
 	}
 	 
 	
 	
-    /** return true if job has not started still
+    /**
+	 * @return the best_CET
+	 */
+	public double getBest_CET() {
+		return Best_CET;
+	}
+	/**
+	 * @param best_CET the best_CET to set
+	 */
+	public void setBest_CET(double best_CET) {
+		Best_CET = best_CET;
+	}
+	/**
+	 * @return the average_CET
+	 */
+	public double getAverage_CET() {
+		return average_CET;
+	}
+	/**
+	 * @param average_CET the average_CET to set
+	 */
+	public void setAverage_CET(double average_CET) {
+		this.average_CET = average_CET;
+	}
+	/** return true if job has not started still
      *
      * @param time
      * @return 
