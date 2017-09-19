@@ -24,7 +24,7 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
  *
  */
 public class GenerateTaskSetTxtUUnifast {
-
+	public static Random random = new Random();
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -43,7 +43,7 @@ public class GenerateTaskSetTxtUUnifast {
     //	System.out.println(" FOR IMPLICIT , Press 0  OR \n    FOR CONSTRAINED , Press -1");
     	int deadlineModel = 0;   //input.nextInt();
    // 	System.out.println("Enter utilization");
-    	double Utotal;//=input.nextDouble();
+    	double Utotal=0.15;//=input.nextDouble();
    //	 System.out.println("Enter 1 for UUnifast  and 2 for Sporadic");
      int tasksetType = 1;   //input.nextInt();
         // FILE NAME SETTING
@@ -70,7 +70,7 @@ public class GenerateTaskSetTxtUUnifast {
         Writer taskwrite = new FileWriter(filename);
         long noOfTasksets=1;
         
-        Random random = new Random();
+        Random random1 = new Random();
        // taskwrite.write("Id\tC\tD\tP\n");
       
        
@@ -82,12 +82,15 @@ public class GenerateTaskSetTxtUUnifast {
         		
         		for (int count =1;count<=TOTAL_NUM_TASKSETS;count++)
         		{
-        			Utotal = random.nextDouble();
+        			Utotal += 0.01; //((double) nextInt(15, 85)/(double) 100); // random1.nextDouble(); //10
+        			if (Double.valueOf(twoDecimals.format(Utotal))==0.85)
+        				Utotal=0.15;
+        		System.out.println("Utotal  "+Utotal+"   TOTAL_NUM_TASKSETS  "+count);
         			genTask = new UUniFastDiscardTaskSetGen(gen, nbTasks, Utotal, deadlineModel,MAX_PERIOD);
 
      			  tasks = genTask.generate();
      			 ArrayList<ITask> taskSet = new  ArrayList<ITask>(Arrays.asList(tasks));
-     			boolean schedulable = worstCaseResp_TDA_RMS(taskSet);
+     		/*	boolean schedulable = worstCaseResp_TDA_RMS(taskSet);
      			if (schedulable)
      			{
      			taskwrite.write("TASKSETNO. "+noOfTasksets++ +" nbTasks "+nbTasks+" Utilization "+ Double.valueOf(twoDecimals.format(SystemMetric.utilisation(tasks)))+"\n");
@@ -97,8 +100,9 @@ public class GenerateTaskSetTxtUUnifast {
      				count--;
      				System.out.println("un schedulable  "+schedulable+"  TASKSETNO. "+noOfTasksets);
      				continue;
-     			}
-     				
+     			}*/
+     			taskwrite.write("TASKSETNO. "+noOfTasksets++ +" nbTasks "+nbTasks+" Utilization "+ Double.valueOf(twoDecimals.format(SystemMetric.utilisation(tasks)))+"\n");
+     			
      			//  System.out.println("\n nbTasks   "+ nbTasks);
      			 for (ITask task : tasks)
                  {
@@ -219,8 +223,12 @@ public class GenerateTaskSetTxtUUnifast {
                              //   t.activate(time++);
                             } */
                                     
-
+        System.out.println("done");
 	}
+	
+	public static  int nextInt(int from, int to) {
+		return from + random.nextInt(to - from + 1);
+                }
 	
 	public static boolean worstCaseResp_TDA_RMS( ArrayList<ITask> taskSet) {
    //   ArrayList<ITask> taskSet = new  ArrayList<ITask>(Arrays.asList(tasks));

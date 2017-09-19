@@ -32,6 +32,7 @@ import taskGeneration.SystemMetric;
 
 public class ScheduleRMS_EASS {
 		 public static final   double  CRITICAL_TIME= 1500;
+		 public static final   double  CRITICAL_freq= 0.42;
 	private double freq=1;
 	
 	/**
@@ -45,7 +46,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_20_08_2017_16_17";
+	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_19_09_2017_11_54";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -168,7 +169,7 @@ public class ScheduleRMS_EASS {
     		fq=0.75;
     	else if (set_fq>0.75)
     		fq=1.0;*/
-    	fq=set_fq;
+    	fq=Math.max(set_fq, CRITICAL_freq);
     	
     	System.out.println("frequency   " +fq);
     	ps.set_freq(taskset,Double.valueOf(twoDecimals.format(fq)));
@@ -188,8 +189,16 @@ public class ScheduleRMS_EASS {
     	   schedulability = schedule.worstCaseResp_TDA_RMS(taskset, fq);   
     	   System.out.println(schedulability);
         
+    	   if (fq>1)
+    	   {
+    		   System.out.println("breaking   "+fq);
+    		   break;
+    	  
+    	   }
+    	   
        }
-    	 
+    	 if (fq>1)
+    		 continue;
     	
    // 	ps.setParameterDouble(taskset);
     	ps.setResponseTime(taskset);    
@@ -204,7 +213,7 @@ public class ScheduleRMS_EASS {
     	
     	
     	
-    	fault = f.lamda_F(hyper/1000, 0.42, fq, 2);        //////////////FAULT////////////
+    	fault = f.lamda_F(hyper/1000, CRITICAL_freq, fq, 2);        //////////////FAULT////////////
 		
 	//	fault = f.lamda_0(10000000);
     	
@@ -593,7 +602,7 @@ public class ScheduleRMS_EASS {
 
     		
     		/////////////////////////////FAULT INDUCTION
-    	//	if(time == 			11000)
+    	/*//	if(time == 			11000)
     	if ( fault.size()>0 )
     		{
 		//	System.out.println("out fault time  "+time+"  task  "+lastExecutedJob.getTaskId()+" job  "+lastExecutedJob.getJobId());
@@ -610,7 +619,7 @@ public class ScheduleRMS_EASS {
     				fault.remove(0);
     			}
     	}
-    	
+    	*/
     	
     			// CHECK DEADLINE MISS
     			Iterator<Job> it = activeJobQ.iterator();

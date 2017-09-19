@@ -11,7 +11,7 @@ import java.util.TreeMap;
  */
 public class Energy {
 	
-	private final static double C_EFF = 0.8;//1.52
+	private final static double C_EFF = 1.52;
 	private final static double Max_Freq_Dependent_Power =C_EFF*1*1*1;
 	private final static double S_critical=0.42; //.15
 
