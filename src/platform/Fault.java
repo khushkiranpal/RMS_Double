@@ -48,7 +48,7 @@ public class Fault {
 		double mean , exponent;
 		exponent = (d*(1-freq))/(1-fMin);
 		mean = Math.pow(10, exponent);
-	//	System.out.println("  mean   "+mean*0.000001 );
+	//	System.out.println("  mean   "+mean*0.000001 +"  exponent "+exponent);
 		PoissonDistribution poisson = new PoissonDistribution(0.000001*mean) 	;
 		for(int i= 1; i<= time; i++)
 		{

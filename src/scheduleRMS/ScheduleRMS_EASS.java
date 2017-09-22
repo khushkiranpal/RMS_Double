@@ -32,7 +32,7 @@ import taskGeneration.SystemMetric;
 
 public class ScheduleRMS_EASS {
 		 public static final   double  CRITICAL_TIME= 1500;
-		 public static final   double  CRITICAL_freq= 0.50;
+		 public static final   double  CRITICAL_freq= 0.75;
 	private double freq=1;
 	
 	/**
@@ -212,7 +212,7 @@ public class ScheduleRMS_EASS {
     	
     	
     	
-    	fault = f.lamda_F(hyper, CRITICAL_freq, fq, 2);        //////////////FAULT////////////
+    	fault = f.lamda_F(hyper, CRITICAL_freq, fq, 3);        //////////////FAULT////////////
 		
 	//	fault = f.lamda_0(10000000);
     	
