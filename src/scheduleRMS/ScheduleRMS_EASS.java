@@ -32,7 +32,7 @@ import taskGeneration.SystemMetric;
 
 public class ScheduleRMS_EASS {
 		 public static final   double  CRITICAL_TIME= 1500;
-		 public static final   double  CRITICAL_freq= 0.42;
+		 public static final   double  CRITICAL_freq= 0.50;
 	private double freq=1;
 	
 	/**
@@ -46,7 +46,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_100_MAX_P_100_PROC_1_19_09_2017_11_54";
+	String inputfilename= "IMPLICIT_TOT_SETS_1000_MAX_P_100000_PROC_1_21_09_2017_16_50";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -136,7 +136,7 @@ public class ScheduleRMS_EASS {
 	    	System.out.println(" hyper  "+hyper);  
 
 	       // if(hyper>100000000)
-	        	hyper = 100000000;
+	        	hyper = 1000000;
 		
 			
     	ParameterSetting ps = new ParameterSetting();
@@ -158,10 +158,9 @@ public class ScheduleRMS_EASS {
 	    	{
 	    	System.out.println("in tasksetcopy id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
 	    	
-	    	}*/
-	    	
+	    	}*/    	
 		  npmResult = npm.schedule(taskset_copy, fault);
-			ps.setParameterDouble(taskset);	  
+		//	ps.setParameterDouble(taskset);	  
     	double set_fq = frequency.SysClockF(taskset), fq = 0;
     /*	if (set_fq>0 && set_fq<=0.5)
     		fq=0.50;
@@ -213,7 +212,7 @@ public class ScheduleRMS_EASS {
     	
     	
     	
-    	fault = f.lamda_F(hyper/1000, CRITICAL_freq, fq, 2);        //////////////FAULT////////////
+    	fault = f.lamda_F(hyper, CRITICAL_freq, fq, 2);        //////////////FAULT////////////
 		
 	//	fault = f.lamda_0(10000000);
     	
@@ -602,12 +601,12 @@ public class ScheduleRMS_EASS {
 
     		
     		/////////////////////////////FAULT INDUCTION
-    	/*//	if(time == 			11000)
+    	//	if(time == 			11000)
     	if ( fault.size()>0 )
     		{
 		//	System.out.println("out fault time  "+time+"  task  "+lastExecutedJob.getTaskId()+" job  "+lastExecutedJob.getJobId());
 
-    		if(time==fault.get(0)*1000)
+    		if(time==fault.get(0))
     		
     			{
     				if (primary.getProc_state()==proc_state.ACTIVE )
@@ -619,7 +618,7 @@ public class ScheduleRMS_EASS {
     				fault.remove(0);
     			}
     	}
-    	*/
+    	
     	
     			// CHECK DEADLINE MISS
     			Iterator<Job> it = activeJobQ.iterator();
@@ -724,21 +723,25 @@ public class ScheduleRMS_EASS {
     	 }*/
     
     	double primaryEnergy, spareEnergy;
-    	primaryEnergy = energyConsumed.energyActive(primary.activeTime+1, fq)/1000+energyConsumed.energy_IDLE(primary.idleTime)/1000+energyConsumed.energySLEEP(primary.sleepTime)/1000;
-    	spareEnergy = energyConsumed.energyActive(spare.activeTime+1, 1)/1000+energyConsumed.energy_IDLE(spare.idleTime)/1000+energyConsumed.energySLEEP(spare.sleepTime)/1000;
+    	primaryEnergy = energyConsumed.energyActive(primary.activeTime+1, fq)+energyConsumed.energy_IDLE(primary.idleTime) +energyConsumed.energySLEEP(primary.sleepTime) ;
+    	spareEnergy = energyConsumed.energyActive(spare.getActiveTime(), 1)+energyConsumed.energy_IDLE(spare.idleTime) +energyConsumed.energySLEEP(spare.sleepTime) ;
     	
     /*	System.out.println("primary  active energy"+energyConsumed.energyActive(primary.activeTime, fq)/1000+"  idle  "+energyConsumed.energy_IDLE(primary.idleTime)/1000
-    	+" sleep  "+energyConsumed.energySLEEP(primary.sleepTime)/1000);
-    	System.out.println("spare  active energy "+energyConsumed.energyActive(spare.activeTime, 1)/1000+"  idle  "+energyConsumed.energy_IDLE(spare.idleTime)/1000
-    	+" sleep  "+energyConsumed.energySLEEP(spare.sleepTime)/1000);
+    	+" sleep  "+energyConsumed.energySLEEP(primary.sleepTime)/1000);*/
+    	System.out.println("spare  active energy "+energyConsumed.energyActive(spare.getActiveTime(), 1)+"  idle  "+energyConsumed.energy_IDLE(spare.idleTime)
+    	+" sleep  "+energyConsumed.energySLEEP(spare.sleepTime));
     
-    	*/
+    	
     	System.out.println("primaryEnergy   "+primaryEnergy +" spareEnergy  "+spareEnergy);
     
     	 writer2.write(total_no_tasksets++ + " "+Double.valueOf(twoDecimals.format(U_SUM))+" "+Double.valueOf(twoDecimals.format(set_fq))+" "
+    	    	    +" "+ Double.valueOf(twoDecimals.format(fq))+" "+(double)primary.activeTime +" "+(double)primary.idleTime +" "+(double)primary.sleepTime 
+    	    	    +" "+(double)spare.activeTime +" "+(double)spare.idleTime +" "+(double)spare.sleepTime +" "+Double.valueOf(twoDecimals.format(primaryEnergy))+
+    	    	    " "+Double.valueOf(twoDecimals.format(spareEnergy))+" "+npmResult[2] +"\n");
+    	/* writer2.write(total_no_tasksets++ + " "+Double.valueOf(twoDecimals.format(U_SUM))+" "+Double.valueOf(twoDecimals.format(set_fq))+" "
     	    +" "+ Double.valueOf(twoDecimals.format(fq))+" "+(double)primary.activeTime/1000+" "+(double)primary.idleTime/1000+" "+(double)primary.sleepTime/1000
     	    +" "+(double)spare.activeTime/1000+" "+(double)spare.idleTime/1000+" "+(double)spare.sleepTime/1000+" "+Double.valueOf(twoDecimals.format(primaryEnergy))+
-    	    " "+Double.valueOf(twoDecimals.format(spareEnergy))+" "+npmResult[2]/1000+"\n");
+    	    " "+Double.valueOf(twoDecimals.format(spareEnergy))+" "+npmResult[2]/1000+"\n");*/
     System.out.println("   tasksets  "+total_no_tasksets);
     
     }

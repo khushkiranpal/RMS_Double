@@ -67,7 +67,7 @@ public class NoPowerManag {
 			TreeSet activationTimes = new TreeSet();
 			long nextActivationTime=0 , executedTime=0;
 			ParameterSetting ps = new ParameterSetting();
-			ps.setParameterDouble(taskset);
+		//	ps.setParameterDouble(taskset);
 			/*for(ITask t : taskset)
 	    	{
 	    	System.out.println("taskset copy  id  "+t.getId()+" wcet  "+t.getWcet()+"  bcet  "+t.getBCET()+"  acet  "+t.getACET());
@@ -75,7 +75,7 @@ public class NoPowerManag {
 	    	}
 			*/
 			
-			hyper = 100000000;//0000;   ////////////////hyper////////////
+			hyper = 1000000;//0000;   ////////////////hyper////////////
 			
 			// ACTIVATE ALL TASKS AT TIME 0 INITIALLY IN QUEUE  
 					

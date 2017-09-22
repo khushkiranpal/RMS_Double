@@ -55,11 +55,14 @@ public class Job {
 		this.promotionTime= promotionTime;
 	}
         
+//	Job job = new  Job(jobId, time, WCET_orginal, wcet, time + deadline, period, frequency, (long)(Slack+ time), BCET, ACET,Best_CET,average_CET);
+    
+	
 	public Job(JobId id, long activationDate2,long remainingTimeCost, long wcet, long absoluteDeadline2, long period, 
 			double freq, long promotionTime, double BCET, double ACET, double Best_CET, double average_CET ) { 
 		jobId= id;
-		this.remainingTimeCost = (long)average_CET;//remainingTimeCost;//(long)ACET;  ////////////////
-		remainingTime = (long)ACET; //wcet;//(long)ACET;  ////////////////
+		this.remainingTimeCost = (long)average_CET; ////////////////remainingTimeCost;//
+		remainingTime = (long)ACET;  ////////////////wcet;//
 		this.deadline= absoluteDeadline2;
 		this.activationDate = activationDate2;
 		absoluteDeadline = absoluteDeadline2;

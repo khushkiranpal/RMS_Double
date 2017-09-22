@@ -39,7 +39,7 @@ public class GenerateTaskSetTxtUUnifast {
     //	System.out.print("Enter no. of tasks in taskset\t");
     	int n=15;  //input.nextInt(); // NUMBER OF TASKS
     //	System.out.print("Enter no. of MAX PERIOD\t");
-    	long MAX_PERIOD=100;    //input.nextLong(); // MAX PERIOD
+    	long MAX_PERIOD=100000;//100;    //input.nextLong(); // MAX PERIOD
     //	System.out.println(" FOR IMPLICIT , Press 0  OR \n    FOR CONSTRAINED , Press -1");
     	int deadlineModel = 0;   //input.nextInt();
    // 	System.out.println("Enter utilization");
