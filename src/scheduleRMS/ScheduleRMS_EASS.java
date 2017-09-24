@@ -31,8 +31,8 @@ import taskGeneration.Job;
 import taskGeneration.SystemMetric;
 
 public class ScheduleRMS_EASS {
-		 public static final   double  CRITICAL_TIME= 1500;
-		 public static final   double  CRITICAL_freq= 0.75;
+		 public static final   double  CRITICAL_TIME=  1500;  //1.5;///
+		 public static final   double  CRITICAL_freq= 0.50;//0.42;   //
 	private double freq=1;
 	
 	/**
@@ -46,7 +46,7 @@ public class ScheduleRMS_EASS {
 	 */
 	public void schedule() throws IOException
 	{
-	String inputfilename= "IMPLICIT_TOT_SETS_1000_MAX_P_100000_PROC_1_21_09_2017_16_50";
+	String inputfilename= "IMPLICIT_TOT_SETS_1000_MAX_P_100000_PROC_1_24_09_2017_13_17";
     FileTaskReaderTxt reader = new FileTaskReaderTxt("D:/CODING/TASKSETS/uunifast/"+inputfilename+".txt"); // read taskset from file
     DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy_HH_mm");
     Calendar cal = Calendar.getInstance();
@@ -55,8 +55,8 @@ public class ScheduleRMS_EASS {
     String filename1= "D:/CODING/TEST/RMS/spare"+"_"+inputfilename+"_"+date+".txt";
     String filename2= "D:/CODING/TEST/RMS/energy"+"_"+inputfilename+"_"+date+".txt";
     
-   //  Writer writer = new FileWriter(filename);
-   //  Writer writer1 = new FileWriter(filename1);
+  //  Writer writer = new FileWriter(filename);
+    // Writer writer1 = new FileWriter(filename1);
     Writer writer2 = new FileWriter(filename2);
     
     DecimalFormat twoDecimals = new DecimalFormat("#.##");  // upto 1 decimal points
@@ -136,7 +136,7 @@ public class ScheduleRMS_EASS {
 	    	System.out.println(" hyper  "+hyper);  
 
 	       // if(hyper>100000000)
-	        	hyper = 1000000;
+	        	hyper = 100000000;
 		
 			
     	ParameterSetting ps = new ParameterSetting();
@@ -160,14 +160,9 @@ public class ScheduleRMS_EASS {
 	    	
 	    	}*/    	
 		  npmResult = npm.schedule(taskset_copy, fault);
-		//	ps.setParameterDouble(taskset);	  
+	//	ps.setParameterDouble(taskset);	  
     	double set_fq = frequency.SysClockF(taskset), fq = 0;
-    /*	if (set_fq>0 && set_fq<=0.5)
-    		fq=0.50;
-    	else if(set_fq>0.5 && set_fq<=.75)
-    		fq=0.75;
-    	else if (set_fq>0.75)
-    		fq=1.0;*/
+    
     	fq=Math.max(set_fq, CRITICAL_freq);
     	
     	System.out.println("frequency   " +fq);
@@ -199,7 +194,7 @@ public class ScheduleRMS_EASS {
     	 if (fq>1)
     		 continue;
     	
-   // 	ps.setParameterDouble(taskset);
+  
     	ps.setResponseTime(taskset);    
     	ps.setPromotionTime(taskset);       //SET PROMOTION TIMES
     
@@ -212,7 +207,7 @@ public class ScheduleRMS_EASS {
     	
     	
     	
-    	fault = f.lamda_F(hyper, CRITICAL_freq, fq, 3);        //////////////FAULT////////////
+    	fault = f.lamda_F(hyper, CRITICAL_freq, fq, 0);        //////////////FAULT////////////
 		
 	//	fault = f.lamda_0(10000000);
     	
@@ -291,8 +286,8 @@ public class ScheduleRMS_EASS {
 		while(itr.hasNext())
 			System.out.println("promotionTimes   "+itr.next());
 	  	*/
-            //  writer.write("\n\nSCHEDULE\nTASK ID  JOBID  ARRIVAL  ACET WCET DEADLINE  isPreempted STARTTIME ENDTIME  \n");
-            //  writer1.write("\n\nSCHEDULE\nTASK ID  JOBID  ARRIVAL Av_CET WCETor DEADLINE  isPreempted STARTTIME ENDTIME  \n");
+             //  writer.write("\n\nSCHEDULE\nTASK ID  JOBID  ARRIVAL  ACET WCET DEADLINE  isPreempted STARTTIME ENDTIME  \n");
+              //  writer1.write("\n\nSCHEDULE\nTASK ID  JOBID  ARRIVAL Av_CET WCETor DEADLINE  isPreempted STARTTIME ENDTIME  \n");
 
         nextActivationTime=  activationTimes.pollFirst();
         
@@ -344,9 +339,9 @@ public class ScheduleRMS_EASS {
     				}
     				
     			//	timeToNextPromotion = promotionTimes.get(0);
-    //				System.out.println("time  "+time  +"  spare job  "+ spareJob.getTaskId()+"  size  "+promotionTimes.size()+
-    	//					"  timeToNextPromotion  "+timeToNextPromotion+" "+spareJob.getPromotionTime());
-    				if (spareJob.isCompletionSuccess()==false)
+    		/*	System.out.println("time  "+time  +"  spare job  "+ spareJob.getTaskId()+"  size  "+promotionTimes.size()+
+    						"  timeToNextPromotion  "+timeToNextPromotion+" "+spareJob.getPromotionTime()+"  faulty"+spareJob.isFaulty());
+    		*/		if (spareJob.isCompletionSuccess()==false || spareJob.isFaulty()==true)
     				{ 
     				//	System.out.println("time    "+time  +"  spare job executed  "+ spareJob.getTaskId());
     		    			
@@ -355,8 +350,8 @@ public class ScheduleRMS_EASS {
     					spare.setBusy(true);
     					spare_current[0]= spareJob;/////to make it visible
     					spare.setProc_state(ProcessorState.ACTIVE);
-    					  //  writer1.write(spareJob.getTaskId()+"\t  "+spareJob.getJobId()+"\t"+spareJob.getActivationDate()+"\t"+spareJob.getAverage_CET()+
-	    //  	  "\t"+spareJob.getRomainingTimeCost()+"\t"+spareJob.getAbsoluteDeadline()+"\t"+spareJob.isPreempted+"\t\t"+time+"\t");
+    			  //  writer1.write(spareJob.getTaskId()+"\t  "+spareJob.getJobId()+"\t"+spareJob.getActivationDate()+"\t"+spareJob.getAverage_CET()+
+	//    	  "\t"+spareJob.getRomainingTimeCost()+"\t"+spareJob.getAbsoluteDeadline()+"\t"+spareJob.isPreempted+"\t\t"+time+"\t");
 	          			
     	  //  			System.out.println(" time  "+time+"  spareBusy   "+spareBusy+"  promotion time "+spareJob.getPromotionTime());
     					//spare.setActiveTime(spareActiveTime++);
@@ -376,20 +371,20 @@ public class ScheduleRMS_EASS {
     				}
     		}
     		
-    		if ( (long)time == (long)spareEndTime-1 && (time>0) && spare.getProc_state()== ProcessorState.ACTIVE)
+    		if ( (long)time == (long)spareEndTime && (time>0) && spare.getProc_state()== ProcessorState.ACTIVE)
     			{
     			
-    			    //  writer1.write(spareEndTime+"    spareEndTime\n");
-    	//		System.out.println("time   "+time  +" spare queue   "+spareQueue.size());
+    			     //  writer1.write(spareEndTime+"    spareEndTime\n");
+    //			System.out.println("time   "+time  +" spare queue   "+spareQueue.size());
     	//		+"  task  "+spareQueue.first().getTaskId()+   					"  job  "+spareQueue.first().getJobId());
     			 spare_current[0].setCompletionSuccess(true);
-    		//	 System.out.println("time   "+time  +" active primary job task  "+ current[0].getTaskId());
+    		//	 System.out.println("time   "+time  +" active primary job task  "+ current[0]);
  			//	System.out.println("time    "+time+"  size  "+activeJobQ.size());
     			
     			 
     			 // DELETE THE RUNNING JOB  
  				
- 				if(current[0].getTaskId()== spare_current[0].getTaskId() &&
+ 				if(current[0]!=null &&current[0].getTaskId()== spare_current[0].getTaskId() &&
  						current[0].getJobId()== spare_current[0].getJobId() 
  						  && primary.getProc_state()==ProcessorState.ACTIVE && spareBusy == true)
  				{
@@ -399,7 +394,7 @@ public class ScheduleRMS_EASS {
 	        		current[0].setCompletionSuccess(true);//-------------------
 	        	//	completedJobs.add(lastExecutedJob);
 	      //  	     System.out.println("time   "+time+"  primary   task  "+current[0].getTaskId()+ "  success of primary and spare  "+current[0].isCompletionSuccess());
-	        		  //  writer.write(spareEndTime+"    spareEndTime\n");
+	        		 //  writer.write(spareEndTime+"    spareEndTime\n");
  				}
  					
  				
@@ -507,7 +502,7 @@ public class ScheduleRMS_EASS {
         			// System.out.println("preemption  ");
 
     				primaryBusy=false;
-    			 //  writer.write("\t"+time+"\t preempted\n");
+    	 //  writer.write("\t"+time+"\t preempted\n");
     				executedTime = time - current[0].getStartTime();
     				// System.out.println("time   "+time+"  executedTime  "+executedTime);
 
@@ -540,7 +535,7 @@ public class ScheduleRMS_EASS {
 	        			//  IDLE SLOTS RECORD
 	                			if (idle!=0)
 	                			{
-	                			     //  writer.write("endtime  "+time+"\n");
+	                	 //  writer.write("endtime  "+time+"\n");
 	                				slot.setLength(idle);  // IF PROCESSOR IS IDLE FROM LONF TIME, RECORD LENGTH OF IDLESLOT
 	                				IdleSlot cloneSlot = (IdleSlot) slot.cloneSlot(); // CLONE THE SLOT
 	                				slots.add(cloneSlot); // ADD THE SLOT TO LIST OR QUEUE
@@ -551,8 +546,8 @@ public class ScheduleRMS_EASS {
 	        			current[0]=j;  // TO MAKE IT VISIBLE OUTSIDE BLOCK
     			//	System.out.println("current[0]  "+current[0].getTaskId()+" start time "+(long)time);
 
-	        			   //  writer.write(j.getTaskId()+"\t  "+j.getJobId()+"\t"+j.getActivationDate()+"\t"+j.getACET()+
-	            //		  "\t"+j.getRemainingTime()+"\t"+j.getAbsoluteDeadline()+"\t"+j.isPreempted+"\t\t"+time+"\t");
+	        //  writer.write(j.getTaskId()+"\t  "+j.getJobId()+"\t"+j.getActivationDate()+"\t"+j.getACET()+
+	    //        		  "\t"+j.getRemainingTime()+"\t"+j.getAbsoluteDeadline()+"\t"+j.isPreempted+"\t\t"+time+"\t");
 	          			
 	        			
 	        				j.setStartTime(time);  // other wise start time is one less than current time 
@@ -583,11 +578,11 @@ public class ScheduleRMS_EASS {
 		        			
 	        			if (idle==0)  // if starting of idle slot
 	        			{
-	        				   //  writer.write("\nIDLE SLOT");
+	        //  writer.write("\nIDLE SLOT");
 	        				slot.setId(id++); // SET ID OF SLOT
 	                        slot.setStartTime(time);// START TIME OF SLOT
 	                        current[0] = null;
-	                        //  writer.write("\tstart time\t"+time+"\t");
+	                       //  writer.write("\tstart time\t"+time+"\t");
 	                	}
 	        			
 	        			idle++; // IDLE SLOT LENGTH 
@@ -602,6 +597,7 @@ public class ScheduleRMS_EASS {
     		
     		/////////////////////////////FAULT INDUCTION
     	//	if(time == 			11000)
+    		//{
     	if ( fault.size()>0 )
     		{
 		//	System.out.println("out fault time  "+time+"  task  "+lastExecutedJob.getTaskId()+" job  "+lastExecutedJob.getJobId());
@@ -614,6 +610,24 @@ public class ScheduleRMS_EASS {
     			System.out.println("                       fault time  "+time+"                task  "+lastExecutedJob.getTaskId()+" job  "+lastExecutedJob.getJobId());
     				
     				lastExecutedJob.setCompletionSuccess(false);
+    				lastExecutedJob.setFaulty(true);
+    				
+    				 Iterator<Job> spareItr = spareQueue.iterator();
+        			 while(spareItr.hasNext())
+        			 {
+        				 Job temp1;
+        				 temp1  = spareItr.next();
+        		//		 System.out.println("primaary pending  task  "+temp1.getTaskId());
+        		    		 
+        				 if(temp1.getTaskId()== lastExecutedJob.getTaskId() && temp1.getJobId()== lastExecutedJob.getJobId())
+        				 {
+        					 temp1.setFaulty(true);
+        					
+        	//				 System.out.println("time    "+time+" primaary pending task  "+temp1.getTaskId()+"  spare"+spare_current[0].getTaskId() );
+        				    break;
+        				 }
+        			 }
+    				
     				}
     				fault.remove(0);
     			}
@@ -660,13 +674,22 @@ public class ScheduleRMS_EASS {
 		 						  )
 		 				{
 		 					spare.setProc_state(proc_state.IDLE);//-------------------
-		 					spareBusy = false;  // set processor free
+		 				//	spareBusy = false;  // set processor free
 		 					spare_current[0].setEndTime(endTime);  // set endtime of job
 			        		spare_current[0].setCompletionSuccess(true);//-------------------
 			        	//	completedJobs.add(lastExecutedJob);
 			 //       	     System.out.println("time   "+time+"  spare   task  "+spare_current[0].getTaskId()+
 			   //     	    		 "  success of  spare and primary  "+spare_current[0].isCompletionSuccess());
 			        		    //  writer1.write(endTime+"    endTime\n");
+			        	/*	if( (timeToNextPromotion<=CRITICAL_TIME) && !spareQueue.first().isCompletionSuccess())
+			    				spare.setProc_state(proc_state.IDLE);
+			    			else
+			    				spare.setProc_state(proc_state.SLEEP);
+			        		
+			        		spare.setBusy(false);*/
+			    			spareBusy=false;
+			        		
+			        		 //    writer1.write(endTime+"    endTime\n");
 		 				}
 		        		
 		        		
@@ -746,8 +769,8 @@ public class ScheduleRMS_EASS {
     
     }
     
-    //  writer.close();
-    //  writer1.close();
+     // writer.close();
+   //   writer1.close();
      writer2.close();
     System.out.println("success");
 	}

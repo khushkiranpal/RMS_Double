@@ -74,7 +74,7 @@ public class Energy {
 	
 	public double energySLEEP (long exec_time)
 	{
-		System.out.println(" sleep  "+exec_time*powerSLEEP());
+	//	System.out.println(" sleep  "+exec_time*powerSLEEP());
 		return (exec_time*powerSLEEP());
 		/*if (exec_time==0)
 			return 0.0;

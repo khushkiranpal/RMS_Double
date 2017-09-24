@@ -98,7 +98,8 @@ public class Job {
 	private double frequency;
 	private double voltage;
 	private double extended_exec_time;
-	private boolean completionSuccess=true;
+	private boolean completionSuccess=false;
+	private boolean faulty= false;
 	private double BCET;
 	private double ACET;
 	private double Best_CET;
@@ -111,6 +112,18 @@ public class Job {
 	 
 	 
 	 /**
+	 * @return the faulty
+	 */
+	public boolean isFaulty() {
+		return faulty;
+	}
+	/**
+	 * @param faulty the faulty to set
+	 */
+	public void setFaulty(boolean faulty) {
+		this.faulty = faulty;
+	}
+	/**
 	 * @return the bCET
 	 */
 	public double getBCET() {
