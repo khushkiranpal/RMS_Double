@@ -8,7 +8,7 @@ import energy.ParameterSetting;
 import energy.SysClockFreq;
 import queue.ISortedQueue;
 import queue.SortedQueuePeriod;
-import scheduleRMS.ScheduleRMS_EASS;
+import scheduleRMS.ScheduleRMS_EASSon23sept;
 import taskGeneration.FileTaskReaderTxt;
 import taskGeneration.GenerateTaskSetTxtUUnifast;
 import taskGeneration.ITask;
@@ -56,7 +56,7 @@ public class test {
 			
 			}
 		}*/
-		ScheduleRMS_EASS test = new ScheduleRMS_EASS();
+		ScheduleRMS_EASSon23sept test = new ScheduleRMS_EASSon23sept();
 	//	ScheduleRMS test = new ScheduleRMS();
 		test.schedule();
     /*	ParameterSetting ps = new ParameterSetting();
@@ -74,7 +74,7 @@ public class test {
 	    	queue.addTasks(set);
 	    	ArrayList<ITask> taskset = new ArrayList<ITask>();
 	    	taskset = queue.getSortedSet();
-	    	ScheduleRMS_EASS.prioritize(taskset);
+	    	ScheduleRMS_EASSon23sept.prioritize(taskset);
 	    	//freq = frequency.SysClockF(taskset);
 	    	//System.out.println("freq    "+freq);
 	    	ArrayList<ITask> taskset_copy = new ArrayList<ITask>();

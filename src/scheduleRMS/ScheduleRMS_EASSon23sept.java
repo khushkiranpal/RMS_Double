@@ -30,7 +30,7 @@ import taskGeneration.IdleSlot;
 import taskGeneration.Job;
 import taskGeneration.SystemMetric;
 
-public class ScheduleRMS_EASS {
+public class ScheduleRMS_EASSon23sept {
 		 public static final   double  CRITICAL_TIME=  1500;  //1.5;///
 		 public static final   double  CRITICAL_freq= 0.50;//0.42;   //
 	private double freq=1;
@@ -136,7 +136,7 @@ public class ScheduleRMS_EASS {
 	    	System.out.println(" hyper  "+hyper);  
 
 	       // if(hyper>100000000)
-	        	hyper = 100000000;
+	        	hyper = 10000000;
 		
 			
     	ParameterSetting ps = new ParameterSetting();
@@ -681,12 +681,12 @@ public class ScheduleRMS_EASS {
 			 //       	     System.out.println("time   "+time+"  spare   task  "+spare_current[0].getTaskId()+
 			   //     	    		 "  success of  spare and primary  "+spare_current[0].isCompletionSuccess());
 			        		    //  writer1.write(endTime+"    endTime\n");
-			        	/*	if( (timeToNextPromotion<=CRITICAL_TIME) && !spareQueue.first().isCompletionSuccess())
+			        		if( (timeToNextPromotion<=CRITICAL_TIME) && !spareQueue.first().isCompletionSuccess())
 			    				spare.setProc_state(proc_state.IDLE);
 			    			else
 			    				spare.setProc_state(proc_state.SLEEP);
 			        		
-			        		spare.setBusy(false);*/
+			        		spare.setBusy(false);
 			    			spareBusy=false;
 			        		
 			        		 //    writer1.write(endTime+"    endTime\n");
